@@ -15,6 +15,5 @@ public class User {
     String firstName;
     String middleName;
     String lastName;
-    String postCode;
 
 }
