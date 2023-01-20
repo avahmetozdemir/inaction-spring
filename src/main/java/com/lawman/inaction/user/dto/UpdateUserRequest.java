@@ -1,13 +1,11 @@
 package com.lawman.inaction.user.dto;
 
-public class CreateUserRequest {
-    String mail;
+public class UpdateUserRequest{
     String firstName;
     String middleName;
     String lastName;
 
-    public CreateUserRequest(String mail, String firstName, String middleName, String lastName) {
-        this.mail = mail;
+    public UpdateUserRequest(String firstName, String middleName, String lastName) {
         this.firstName = firstName;
         this.middleName = middleName;
         this.lastName = lastName;

@@ -1,5 +1,8 @@
 package com.lawman.inaction.user;
 
+import com.lawman.inaction.user.dto.CreateUserRequest;
+import com.lawman.inaction.user.dto.UpdateUserRequest;
+import com.lawman.inaction.user.dto.UserDto;
 import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,13 +20,13 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<User>> getAllUsers(){
+    public ResponseEntity<List<UserDto>> getAllUsers(){
         return ResponseEntity.ok(userService.getAllUsers());
     }
 
     @GetMapping("/{id}") //200
     public ResponseEntity<User> getUser(@PathVariable("id") Long id){
-        return ResponseEntity.ok(userService.getAllUsers(id));
+        return ResponseEntity.ok(userService.getUser(id));
     }
 
     @PostMapping //201
