@@ -1,5 +1,7 @@
 package com.lawman.inaction.user;
 
+import com.lawman.inaction.user.dto.CreateUserRequest;
+import com.lawman.inaction.user.dto.UpdateUserRequest;
 import com.lawman.inaction.user.dto.UserDto;
 import com.lawman.inaction.user.dto.UserDtoConverter;
 import com.lawman.inaction.user.exception.UserNotFoundException;
@@ -27,7 +29,26 @@ public class UserService {
     }
 
     public UserDto getUserById(Long id) {
-        User user = userRepository.findById(id).orElseThrow(()-> new UserNotFoundException(("User couldn't be found by following id: " + id)));
+        User user = findUserById(id);
         return userDtoConverter.convert(user);
+    }
+
+    public UserDto createUser(CreateUserRequest userRequest) {
+        User user  = new User(userRequest.getMail(), userRequest.getFirstName(), userRequest.getMiddleName(), userRequest.getLastName());
+
+        return userDtoConverter.convert(userRepository.save(user));
+
+    }
+
+    public UserDto updateUser(Long id, UpdateUserRequest updateUserRequest) {
+        User user = findUserById(id);
+        User updatedUser = new User(user.getId(), user.getMail(), user.getFirstName(),user.getMiddleName(),user.getLastName());
+
+        return userDtoConverter.convert(userRepository.save(updatedUser));
+
+    }
+
+    private User findUserById(Long id) {
+        return userRepository.findById(id).orElseThrow(()-> new UserNotFoundException(("User couldn't be found by following id: " + id)));
     }
 }

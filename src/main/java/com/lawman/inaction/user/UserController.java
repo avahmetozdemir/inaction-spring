@@ -25,19 +25,19 @@ public class UserController {
     }
 
     @GetMapping("/{id}") //200
-    public ResponseEntity<User> getUserById(@PathVariable("id") Long id){
+    public ResponseEntity<UserDto> getUserById(@PathVariable("id") Long id){
         return ResponseEntity.ok(userService.getUserById(id));
     }
 
     @PostMapping //201
-    public ResponseEntity<User> createUser(@RequestBody CreateUserRequest userRequest) {
+    public ResponseEntity<UserDto> createUser(@RequestBody CreateUserRequest userRequest) {
         return ResponseEntity.ok(userService.createUser(userRequest));
 
     }
 
     @PutMapping("/{id}") //202
-    public ResponseEntity<User> updateUser(@RequestBody UpdateUserRequest updateUserRequest) {
-        return ResponseEntity.ok(userService.updateUser(updateUserRequest));
+    public ResponseEntity<UserDto> updateUser(@PathVariable Long id, @RequestBody UpdateUserRequest updateUserRequest) {
+        return ResponseEntity.ok(userService.updateUser(id,updateUserRequest));
     }
 
     @PatchMapping("/{id}")
