@@ -4,6 +4,7 @@ import com.lawman.inaction.user.dto.CreateUserRequest;
 import com.lawman.inaction.user.dto.UpdateUserRequest;
 import com.lawman.inaction.user.dto.UserDto;
 import org.apache.coyote.Response;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,6 +44,12 @@ public class UserController {
     @PatchMapping("/{id}")
     public ResponseEntity<Void> deactivateUser(@PathVariable("id") Long id) {
         userService.deactivateUser(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("/{id}/active")
+    public ResponseEntity<Void> activateUser(@PathVariable("id") Long id) {
+        userService.activateUser(id);
         return ResponseEntity.ok().build();
     }
 

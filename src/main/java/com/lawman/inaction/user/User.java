@@ -10,67 +10,76 @@ import jakarta.persistence.Id;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
-    String mail;
-    String firstName;
-    String middleName;
-    String lastName;
+   private Long id;
+    private String mail;
+    private String firstName;
+    private String middleName;
+    private String lastName;
+
+    private Boolean isActive;
+
+    public Boolean getActive() {
+        return isActive;
+    }
+
+    public void setActive(Boolean active) {
+        isActive = active;
+    }
 
     public User() {
     }
 
-    public User(String mail, String firstName, String middleName, String lastName) {
-        this.mail = mail;
-        this.firstName = firstName;
-        this.middleName = middleName;
-        this.lastName = lastName;
-    }
-
-    public User(Long id, String mail, String firstName, String middleName, String lastName) {
+    public User(Long id,String mail, String firstName, String middleName, String lastName) {
         this.id = id;
         this.mail = mail;
         this.firstName = firstName;
         this.middleName = middleName;
         this.lastName = lastName;
+    }
+
+    public User(String mail, String firstName, String middleName, String lastName, Boolean isActive) {
+        this.mail = mail;
+        this.firstName = firstName;
+        this.middleName = middleName;
+        this.lastName = lastName;
+        this.isActive = isActive;
+    }
+
+    public User(Long id, String mail, String firstName, String middleName, String lastName,Boolean isActive) {
+        this.id = id;
+        this.mail = mail;
+        this.firstName = firstName;
+        this.middleName = middleName;
+        this.lastName = lastName;
+        this.isActive = isActive;
     }
 
     public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+
 
     public String getMail() {
         return mail;
     }
 
-    public void setMail(String mail) {
-        this.mail = mail;
-    }
+
 
     public String getFirstName() {
         return firstName;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
 
     public String getMiddleName() {
         return middleName;
     }
 
-    public void setMiddleName(String middleName) {
-        this.middleName = middleName;
-    }
+
 
     public String getLastName() {
         return lastName;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
+
 }

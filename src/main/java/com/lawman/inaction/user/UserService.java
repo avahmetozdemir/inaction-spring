@@ -4,7 +4,10 @@ import com.lawman.inaction.user.dto.CreateUserRequest;
 import com.lawman.inaction.user.dto.UpdateUserRequest;
 import com.lawman.inaction.user.dto.UserDto;
 import com.lawman.inaction.user.dto.UserDtoConverter;
+import com.lawman.inaction.user.exception.UserIsNotActiveException;
 import com.lawman.inaction.user.exception.UserNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +17,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class UserService {
-
+    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
     private final UserRepository userRepository;
     private final UserDtoConverter userDtoConverter;
 
@@ -34,7 +37,7 @@ public class UserService {
     }
 
     public UserDto createUser(CreateUserRequest userRequest) {
-        User user  = new User(userRequest.getMail(), userRequest.getFirstName(), userRequest.getMiddleName(), userRequest.getLastName());
+        User user  = new User(userRequest.getMail(), userRequest.getFirstName(), userRequest.getMiddleName(), userRequest.getLastName(),true);
 
         return userDtoConverter.convert(userRepository.save(user));
 
@@ -42,7 +45,11 @@ public class UserService {
 
     public UserDto updateUser(Long id, UpdateUserRequest updateUserRequest) {
         User user = findUserById(id);
-        User updatedUser = new User(user.getId(), user.getMail(), user.getFirstName(),user.getMiddleName(),user.getLastName());
+        if(!user.getActive()) {
+            logger.warn("User is not active to update!");
+            throw new UserIsNotActiveException("User is not active to update!");
+        }
+        User updatedUser = new User( user.getId(),user.getMail(), updateUserRequest.getFirstName(),updateUserRequest.getMiddleName(),updateUserRequest.getLastName());
 
         return userDtoConverter.convert(userRepository.save(updatedUser));
 
@@ -50,5 +57,15 @@ public class UserService {
 
     private User findUserById(Long id) {
         return userRepository.findById(id).orElseThrow(()-> new UserNotFoundException(("User couldn't be found by following id: " + id)));
+    }
+
+    public void deactivateUser(Long id) {
+
+    }
+
+    public void deleteUser(Long id) {
+    }
+
+    public void activateUser(Long id) {
     }
 }
