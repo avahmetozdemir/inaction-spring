@@ -1,15 +1,21 @@
 package com.lawman.inaction.user.dto;
 
 public class UpdateUserRequest{
-    String firstName;
-    String middleName;
-    String lastName;
+   private String mail;
+   private String firstName;
+   private String middleName;
+   private String lastName;
 
 
-    public UpdateUserRequest(String firstName, String middleName, String lastName) {
+    public UpdateUserRequest(String mail,String firstName, String middleName, String lastName) {
+        this.mail = mail;
         this.firstName = firstName;
         this.middleName = middleName;
         this.lastName = lastName;
+    }
+
+    public String getMail() {
+        return mail;
     }
 
     public String getFirstName() {

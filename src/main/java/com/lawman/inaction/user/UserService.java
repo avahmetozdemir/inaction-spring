@@ -8,9 +8,7 @@ import com.lawman.inaction.user.exception.UserIsNotActiveException;
 import com.lawman.inaction.user.exception.UserNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -43,10 +41,10 @@ public class UserService {
 
     }
 
-    public UserDto updateUser(Long id, UpdateUserRequest updateUserRequest) {
-        User user = findUserById(id);
+    public UserDto updateUser(String mail, UpdateUserRequest updateUserRequest) {
+        User user = findUserByMail(mail);
         if(!user.getActive()) {
-            logger.warn("User is not active to update!");
+            logger.warn(String.format("User is not active to update!, user mail: %s", mail));
             throw new UserIsNotActiveException("User is not active to update!");
         }
         User updatedUser = new User( user.getId(),user.getMail(), updateUserRequest.getFirstName(),updateUserRequest.getMiddleName(),updateUserRequest.getLastName());
@@ -55,17 +53,34 @@ public class UserService {
 
     }
 
+    private User findUserByMail(String mail) {
+      return userRepository.findByMail(mail).orElseThrow(()->new UserNotFoundException("User couldn't be found by following mail: " + mail));
+    }
+
     private User findUserById(Long id) {
         return userRepository.findById(id).orElseThrow(()-> new UserNotFoundException(("User couldn't be found by following id: " + id)));
     }
 
     public void deactivateUser(Long id) {
+       changeActivationUser(id, false);
 
+
+    }
+
+
+
+    public void activateUser(Long id) {
+        changeActivationUser(id, true);
     }
 
     public void deleteUser(Long id) {
     }
 
-    public void activateUser(Long id) {
+    private void  changeActivationUser(Long id, Boolean isActive) {
+        User user  = findUserById(id);
+
+        User updatedUser = new User( user.getId(),user.getMail(), user.getFirstName(),user.getMiddleName(),user.getLastName(),isActive);
+
+        userRepository.save(updatedUser);
     }
 }
