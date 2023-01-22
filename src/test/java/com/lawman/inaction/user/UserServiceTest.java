@@ -2,6 +2,7 @@ package com.lawman.inaction.user;
 
 import com.lawman.inaction.user.dto.UserDto;
 import com.lawman.inaction.user.dto.UserDtoConverter;
+import com.lawman.inaction.user.exception.UserNotFoundException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -47,7 +48,7 @@ public class UserServiceTest extends TestSupport {
     }
 
     @Test
-    public void testGetUserByMail_whenUserMailExist_itShouldReturnUserDtoList() {
+    public void testGetUserByMail_whenUserMailExist_itShouldReturnUserDto() {
         String mail= "mail@gmail.com";
 
         User user = generateUser(mail);
@@ -61,6 +62,22 @@ public class UserServiceTest extends TestSupport {
         verify(repository).findByMail(mail);
         verify(converter).convert(user);
 
+
+
+    }
+
+    @Test
+    public void testGetUserByMail_whenUserMailDoesNotExist_itShouldThrowUserNotFoundException() {
+        String mail= "mail@gmail.com";
+
+
+        when(repository.findByMail(mail)).thenReturn(Optional.empty());
+        assertThrows(UserNotFoundException.class, ()-> userService.getUserByMail(mail));
+
+
+
+        verify(repository).findByMail(mail);
+        verifyNoInteractions(converter);
 
 
     }
