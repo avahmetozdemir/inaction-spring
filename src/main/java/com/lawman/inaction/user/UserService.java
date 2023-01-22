@@ -63,8 +63,6 @@ public class UserService {
 
     public void deactivateUser(Long id) {
        changeActivationUser(id, false);
-
-
     }
 
 
@@ -74,6 +72,11 @@ public class UserService {
     }
 
     public void deleteUser(Long id) {
+        if(doesUserExist(id)){
+            userRepository.deleteById(id);
+        }else {
+            throw new UserNotFoundException("User couldn't be found by following id: " + id);
+        }
     }
 
     private void  changeActivationUser(Long id, Boolean isActive) {
@@ -82,5 +85,9 @@ public class UserService {
         User updatedUser = new User( user.getId(),user.getMail(), user.getFirstName(),user.getMiddleName(),user.getLastName(),isActive);
 
         userRepository.save(updatedUser);
+    }
+
+    private boolean doesUserExist(Long id) {
+        return userRepository.existsById(id);
     }
 }

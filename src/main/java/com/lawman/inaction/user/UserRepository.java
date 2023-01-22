@@ -7,5 +7,5 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User,Long> {
 
 
-    public Optional<User> findByMail(String mail);
+    public Optional<User> findByMail(String mail);// user attributeleri ile ilgili bir method oluşturuduğumdan jpa otomatik olarak devreye girip bunu bize sağlıyor.
 }
