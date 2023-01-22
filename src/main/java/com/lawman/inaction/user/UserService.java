@@ -91,4 +91,10 @@ public class UserService {
     private boolean doesUserExist(Long id) {
         return userRepository.existsById(id);
     }
+
+
+    public UserDto getUserByMail(String mail) {
+        User user = findUserByMail(mail);
+        return userDtoConverter.convert(user);
+    }
 }

@@ -9,6 +9,7 @@ import org.junit.jupiter.api.TestInstance;
 import org.mockito.Mockito;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -29,7 +30,7 @@ public class UserServiceTest extends TestSupport {
     }
 
     @Test
-    public void testGetAllUsers_itShouldReturnUserDtoList() {
+    public void testGetAllUsers_itShouldReturnUserDto() {
         List<User> userList = generateUsers();
         List<UserDto> userDtoList = generateUserDtoList(userList);
         when(repository.findAll()).thenReturn(userList);
@@ -40,6 +41,25 @@ public class UserServiceTest extends TestSupport {
         assertEquals(userDtoList, result);
         verify(repository).findAll();
         verify(converter).convert(userList);
+
+
+
+    }
+
+    @Test
+    public void testGetUserByMail_whenUserMailExist_itShouldReturnUserDtoList() {
+        String mail= "mail@gmail.com";
+
+        User user = generateUser(mail);
+        UserDto userDto= generateUserDto(mail);
+        when(repository.findByMail(mail)).thenReturn(Optional.of(user));
+        when(converter.convert(user)).thenReturn(userDto);
+
+        UserDto result = userService.getUserByMail(mail);
+
+        assertEquals(userDto, result);
+        verify(repository).findByMail(mail);
+        verify(converter).convert(user);
 
 
 
