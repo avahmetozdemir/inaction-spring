@@ -26,7 +26,8 @@ public class UserService {
 
 
     public List<UserDto> getAllUsers() {
-        return userRepository.findAll().stream().map(userDtoConverter::convert).collect(Collectors.toList());//???map fonsiyonu ile ne yapılıyor anla.
+        return userDtoConverter.convert(userRepository.findAll());
+
     }
 
     public UserDto getUserById(Long id) {
