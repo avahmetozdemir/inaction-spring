@@ -229,4 +229,31 @@ public class UserServiceTest extends TestSupport {
 
     }
 
+    @Test
+    public void testDeleteUser_whenUserIdExist_itShouldDeleteUser() {
+        String mail= "mail@gmail.com";
+
+        User user =  new User(userId,mail,"firstName", "middleName","lastName",false );
+
+        when(repository.findById(userId)).thenReturn(Optional.of(user));
+
+        userService.deleteUser(userId);
+
+        verify(repository).findById(userId);
+        verify(repository).deleteById(userId);
+
+    }
+
+    @Test
+    public void testDeleteUser_whenUserIdDoesNotExist_itShouldThrowUserNotFoundException() {
+
+        when(repository.findById(userId)).thenReturn(Optional.empty());
+
+        assertThrows(UserNotFoundException.class, ()->userService.deleteUser(userId) );
+
+        verify(repository).findById(userId);
+        verifyNoMoreInteractions(repository);
+
+    }
+
 }

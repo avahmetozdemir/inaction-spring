@@ -73,11 +73,8 @@ public class UserService {
     }
 
     public void deleteUser(Long id) {
-        if(doesUserExist(id)){
-            userRepository.deleteById(id);
-        }else {
-            throw new UserNotFoundException("User couldn't be found by following id: " + id);
-        }
+       findUserById(id);
+       userRepository.deleteById(id);
     }
 
     private void  changeActivationUser(Long id, Boolean isActive) {
