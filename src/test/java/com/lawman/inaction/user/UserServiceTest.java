@@ -172,4 +172,33 @@ public class UserServiceTest extends TestSupport {
 
     }
 
+
+    @Test
+    public void testDeactivateUser_whenUserIdExist_itShouldUpdateUserByActive() {
+        String mail= "mail@gmail.com";
+
+        User user =  new User(userId,mail,"firstName", "middleName","lastName",true );
+        User savedUser =  new User(userId,mail,"firstName", "middleName","lastName",false );
+
+        when(repository.findById(userId)).thenReturn(Optional.of(user));
+
+        userService.deactivateUser(userId);
+
+        verify(repository).findById(userId);
+        verify(repository).save(savedUser);
+
+    }
+
+    @Test
+    public void testDeactivateUser_whenUserIdDoesNotExist_itShouldThrowUserNotFoundException() {
+
+        when(repository.findById(userId)).thenReturn(Optional.empty());
+
+        assertThrows(UserNotFoundException.class, ()->userService.deactivateUser(userId) );
+
+        verify(repository).findById(userId);
+        verifyNoMoreInteractions(repository);
+
+    }
+
 }

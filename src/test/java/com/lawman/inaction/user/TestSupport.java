@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class TestSupport {
-    private static Long userId = 100L;
+    public static Long userId = 100L;
     public static List<User> generateUsers() {
       return  IntStream.range(0,5).mapToObj(i ->
             new User((long) i, i+"@gmail.com" ,"firstName"+ i, "", "lastName" + i, new Random(2).nextBoolean())
