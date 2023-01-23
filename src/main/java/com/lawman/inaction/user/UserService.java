@@ -36,7 +36,7 @@ public class UserService {
     }
 
     public UserDto createUser(CreateUserRequest userRequest) {
-        User user  = new User(userRequest.getMail(), userRequest.getFirstName(), userRequest.getMiddleName(), userRequest.getLastName(),true);
+        User user  = new User(userRequest.getMail(), userRequest.getFirstName(), userRequest.getMiddleName(), userRequest.getLastName(),false);
 
         return userDtoConverter.convert(userRepository.save(user));
 

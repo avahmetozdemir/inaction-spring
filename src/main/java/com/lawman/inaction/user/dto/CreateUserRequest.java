@@ -15,6 +15,13 @@ public class CreateUserRequest {
         return isActive;
     }
 
+    public CreateUserRequest(String mail, String firstName, String middleName, String lastName) {
+        this.mail = mail;
+        this.firstName = firstName;
+        this.middleName = middleName;
+        this.lastName = lastName;
+    }
+
     public CreateUserRequest(String mail, String firstName, String middleName, String lastName, Boolean isActive) {
         this.mail = mail;
         this.firstName = firstName;

@@ -1,5 +1,6 @@
 package com.lawman.inaction.user;
 
+import com.lawman.inaction.user.dto.CreateUserRequest;
 import com.lawman.inaction.user.dto.UserDto;
 import com.lawman.inaction.user.dto.UserDtoConverter;
 import com.lawman.inaction.user.exception.UserNotFoundException;
@@ -78,6 +79,30 @@ public class UserServiceTest extends TestSupport {
 
         verify(repository).findByMail(mail);
         verifyNoInteractions(converter);
+
+
+    }
+
+
+    @Test
+    public void testCreateUser_itShouldReturnCreatedUserDto() {
+        String mail= "mail@gmail.com";
+        CreateUserRequest request = new CreateUserRequest(mail, "firstName", "middleName","lastName" );
+        User user =  new User(mail,"firstName", "middleName","lastName",false );
+        User savedUser = new User(1L, mail, "firstName", "middleName","lastName",false );
+        UserDto userDto = new UserDto(mail, "firstName", "middleName","lastName");
+
+        when(repository.save(user)).thenReturn(savedUser);
+        when(converter.convert(savedUser)).thenReturn(userDto);
+
+        UserDto result = userService.createUser((request));
+
+
+        assertEquals(userDto,result);
+
+
+        verify(repository).save(user);
+        verify(converter).convert(savedUser);
 
 
     }
