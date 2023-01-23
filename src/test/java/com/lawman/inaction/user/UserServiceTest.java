@@ -17,7 +17,6 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class UserServiceTest extends TestSupport {
     private UserDtoConverter converter;
     private UserRepository repository;
@@ -129,6 +128,25 @@ public class UserServiceTest extends TestSupport {
         verify(repository).findByMail(mail);
         verify(repository).save(updatedUser);
         verify(converter).convert(savedUser);
+
+
+    }
+
+    @Test
+    public void testUpdateUser_whenUserMailExist_itShouldThrowUserNotFoundException() {
+        String mail= "mail@gmail.com";
+        UpdateUserRequest request = new UpdateUserRequest( "firstName2", "middleName2","lastName2" );
+
+
+        when(repository.findByMail(mail)).thenReturn(Optional.empty());
+
+        assertThrows(UserNotFoundException.class, () -> userService.updateUser(mail, request));
+
+
+
+        verify(repository).findByMail(mail);
+        verifyNoMoreInteractions(repository);
+        verifyNoInteractions(converter);
 
 
     }
