@@ -174,7 +174,7 @@ public class UserServiceTest extends TestSupport {
 
 
     @Test
-    public void testDeactivateUser_whenUserIdExist_itShouldUpdateUserByActive() {
+    public void testDeactivateUser_whenUserIdExist_itShouldUpdateUserByActiveTrue() {
         String mail= "mail@gmail.com";
 
         User user =  new User(userId,mail,"firstName", "middleName","lastName",true );
@@ -195,6 +195,34 @@ public class UserServiceTest extends TestSupport {
         when(repository.findById(userId)).thenReturn(Optional.empty());
 
         assertThrows(UserNotFoundException.class, ()->userService.deactivateUser(userId) );
+
+        verify(repository).findById(userId);
+        verifyNoMoreInteractions(repository);
+
+    }
+
+    @Test
+    public void testActivateUser_whenUserIdExist_itShouldUpdateUserByActiveTrue() {
+        String mail= "mail@gmail.com";
+
+        User user =  new User(userId,mail,"firstName", "middleName","lastName",false );
+        User savedUser =  new User(userId,mail,"firstName", "middleName","lastName",true );
+
+        when(repository.findById(userId)).thenReturn(Optional.of(user));
+
+        userService.activateUser(userId);
+
+        verify(repository).findById(userId);
+        verify(repository).save(savedUser);
+
+    }
+
+    @Test
+    public void testActivateUser_whenUserIdDoesNotExist_itShouldThrowUserNotFoundException() {
+
+        when(repository.findById(userId)).thenReturn(Optional.empty());
+
+        assertThrows(UserNotFoundException.class, ()->userService.activateUser(userId) );
 
         verify(repository).findById(userId);
         verifyNoMoreInteractions(repository);
