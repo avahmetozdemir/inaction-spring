@@ -4,6 +4,7 @@ import com.lawman.inaction.user.dto.CreateUserRequest;
 import com.lawman.inaction.user.dto.UpdateUserRequest;
 import com.lawman.inaction.user.dto.UserDto;
 import com.lawman.inaction.user.dto.UserDtoConverter;
+import com.lawman.inaction.user.exception.UserIsNotActiveException;
 import com.lawman.inaction.user.exception.UserNotFoundException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -141,6 +142,26 @@ public class UserServiceTest extends TestSupport {
         when(repository.findByMail(mail)).thenReturn(Optional.empty());
 
         assertThrows(UserNotFoundException.class, () -> userService.updateUser(mail, request));
+
+
+
+        verify(repository).findByMail(mail);
+        verifyNoMoreInteractions(repository);
+        verifyNoInteractions(converter);
+
+
+    }
+
+    @Test
+    public void testUpdateUser_whenUserMailExistButUserIsNotActive_itShouldThrowUserNotActiveException() {
+        String mail= "mail@gmail.com";
+        UpdateUserRequest request = new UpdateUserRequest( "firstName2", "middleName2","lastName2" );
+        User user =  new User(1L,mail,"firstName", "middleName","lastName",false );
+
+
+        when(repository.findByMail(mail)).thenReturn(Optional.of(user));
+
+        assertThrows(UserIsNotActiveException.class, () -> userService.updateUser(mail, request));
 
 
 
