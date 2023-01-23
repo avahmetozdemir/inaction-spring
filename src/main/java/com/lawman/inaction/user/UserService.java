@@ -48,7 +48,7 @@ public class UserService {
             logger.warn(String.format("User is not active to update!, user mail: %s", mail));
             throw new UserIsNotActiveException("User is not active to update!");
         }
-        User updatedUser = new User( user.getId(),user.getMail(), updateUserRequest.getFirstName(),updateUserRequest.getMiddleName(),updateUserRequest.getLastName());
+        User updatedUser = new User( user.getId(),user.getMail(), updateUserRequest.getFirstName(),updateUserRequest.getMiddleName(),updateUserRequest.getLastName(),user.getActive());
 
         return userDtoConverter.convert(userRepository.save(updatedUser));
 

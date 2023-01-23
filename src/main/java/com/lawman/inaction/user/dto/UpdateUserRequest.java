@@ -7,8 +7,7 @@ public class UpdateUserRequest{
    private String lastName;
 
 
-    public UpdateUserRequest(String mail,String firstName, String middleName, String lastName) {
-        this.mail = mail;
+    public UpdateUserRequest(String firstName, String middleName, String lastName) {
         this.firstName = firstName;
         this.middleName = middleName;
         this.lastName = lastName;

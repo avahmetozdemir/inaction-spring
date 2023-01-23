@@ -1,6 +1,7 @@
 package com.lawman.inaction.user;
 
 import com.lawman.inaction.user.dto.CreateUserRequest;
+import com.lawman.inaction.user.dto.UpdateUserRequest;
 import com.lawman.inaction.user.dto.UserDto;
 import com.lawman.inaction.user.dto.UserDtoConverter;
 import com.lawman.inaction.user.exception.UserNotFoundException;
@@ -23,7 +24,7 @@ public class UserServiceTest extends TestSupport {
 
     private UserService userService;
 
-    @BeforeAll
+    @BeforeEach
     public void setUp(){
         converter = mock(UserDtoConverter.class);
         repository = mock(UserRepository.class);
@@ -102,6 +103,31 @@ public class UserServiceTest extends TestSupport {
 
 
         verify(repository).save(user);
+        verify(converter).convert(savedUser);
+
+
+    }
+
+    @Test
+    public void testUpdateUser_whenUserMailExistAndUserIsActive_itShouldReturnUpdatedUserDto() {
+        String mail= "mail@gmail.com";
+        UpdateUserRequest request = new UpdateUserRequest( "firstName2", "middleName2","lastName2" );
+        User user =  new User(1L,mail,"firstName", "middleName","lastName",true );
+        User updatedUser = new User(1L, mail, "firstName2", "middleName2","lastName2",true );
+        User savedUser = new User(1L, mail, "firstName2", "middleName2","lastName2",true );
+        UserDto userDto = new UserDto(mail, "firstName2", "middleName2","lastName2");
+
+        when(repository.findByMail(mail)).thenReturn(Optional.of(user));
+        when(repository.save(updatedUser)).thenReturn(savedUser);
+        when(converter.convert(savedUser)).thenReturn(userDto);
+
+        UserDto result = userService.updateUser(mail, request);
+
+
+        assertEquals(userDto,result);
+
+        verify(repository).findByMail(mail);
+        verify(repository).save(updatedUser);
         verify(converter).convert(savedUser);
 
 
