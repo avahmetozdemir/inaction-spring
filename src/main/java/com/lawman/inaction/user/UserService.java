@@ -85,9 +85,6 @@ public class UserService {
         userRepository.save(updatedUser);
     }
 
-    private boolean doesUserExist(Long id) {
-        return userRepository.existsById(id);
-    }
 
 
     public UserDto getUserByMail(String mail) {
