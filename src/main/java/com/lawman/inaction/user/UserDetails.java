@@ -30,7 +30,24 @@ public class UserDetails {
         this.users = users;
     }
 
+    public UserDetails(String phoneNumber, String address, String city, String country, String postCode, Users users) {
+        this.phoneNumber = phoneNumber;
+        this.address = address;
+        this.city = city;
+        this.country = country;
+        this.postCode = postCode;
+        this.users = users;
+    }
+
     public UserDetails() {
+    }
+
+    public Users getUsers() {
+        return users;
+    }
+
+    public void setUsers(Users users) {
+        this.users = users;
     }
 
     public Long getId() {

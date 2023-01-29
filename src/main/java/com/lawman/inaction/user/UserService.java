@@ -57,7 +57,7 @@ public class UserService {
       return userRepository.findByMail(mail).orElseThrow(()->new UserNotFoundException("User couldn't be found by following mail: " + mail));
     }
 
-    private Users findUserById(Long id) {
+    protected Users findUserById(Long id) {
         return userRepository.findById(id).orElseThrow(()-> new UserNotFoundException(("User couldn't be found by following id: " + id)));
     }
 
