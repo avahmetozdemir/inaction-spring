@@ -57,6 +57,16 @@ public class Users {
         this.isActive = isActive;
     }
 
+    public Users(Long id, String mail, String firstName, String middleName, String lastName, Boolean isActive, Set<UserDetails> userDetailsSet) {
+        this.id = id;
+        this.mail = mail;
+        this.firstName = firstName;
+        this.middleName = middleName;
+        this.lastName = lastName;
+        this.isActive = isActive;
+        this.userDetailsSet = userDetailsSet;
+    }
+
     public Long getId() {
         return id;
     }

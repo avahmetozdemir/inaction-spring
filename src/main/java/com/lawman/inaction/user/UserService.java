@@ -34,14 +34,14 @@ public class UserService {
         return userDtoConverter.convert(users);
     }
 
-    public UserDto createUser(CreateUserRequest userRequest) {
+    public UserDto createUser(final CreateUserRequest userRequest) {
         Users users = new Users(userRequest.getMail(), userRequest.getFirstName(), userRequest.getMiddleName(), userRequest.getLastName(),false);
 
         return userDtoConverter.convert(userRepository.save(users));
 
     }
 
-    public UserDto updateUser(String mail, UpdateUserRequest updateUserRequest) {
+    public UserDto updateUser(final String mail,final UpdateUserRequest updateUserRequest) {
         Users users = findUserByMail(mail);
         if(!users.getActive()) {
             logger.warn(String.format("User is not active to update!, user mail: %s", mail));
@@ -53,30 +53,30 @@ public class UserService {
 
     }
 
-    private Users findUserByMail(String mail) {
+    private Users findUserByMail(final String mail) {
       return userRepository.findByMail(mail).orElseThrow(()->new UserNotFoundException("User couldn't be found by following mail: " + mail));
     }
 
-    protected Users findUserById(Long id) {
+    protected Users findUserById(final Long id) {
         return userRepository.findById(id).orElseThrow(()-> new UserNotFoundException(("User couldn't be found by following id: " + id)));
     }
 
-    public void deactivateUser(Long id) {
+    public void deactivateUser(final Long id) {
        changeActivationUser(id, false);
     }
 
 
 
-    public void activateUser(Long id) {
+    public void activateUser(final Long id) {
         changeActivationUser(id, true);
     }
 
-    public void deleteUser(Long id) {
+    public void deleteUser(final Long id) {
        findUserById(id);
        userRepository.deleteById(id);
     }
 
-    private void  changeActivationUser(Long id, Boolean isActive) {
+    private void  changeActivationUser(final Long id,final Boolean isActive) {
         Users users = findUserById(id);
 
         Users updatedUsers = new Users( users.getId(), users.getMail(), users.getFirstName(), users.getMiddleName(), users.getLastName(),isActive);
@@ -86,7 +86,7 @@ public class UserService {
 
 
 
-    public UserDto getUserByMail(String mail) {
+    public UserDto getUserByMail(final String mail) {
         Users users = findUserByMail(mail);
         return userDtoConverter.convert(users);
     }
