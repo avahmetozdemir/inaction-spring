@@ -1,24 +1,25 @@
 package com.lawman.inaction.user;
 
-
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
-public class User {
+public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Long id;
+
+    @Column(unique = true)
     private String mail;
     private String firstName;
     private String middleName;
     private String lastName;
 
     private Boolean isActive;
+
+    @OneToMany(mappedBy = "users", fetch = FetchType.LAZY, cascade =CascadeType.ALL )
+    private Set<UserDetails> userDetailsSet;
 
     public Boolean getActive() {
         return isActive;
@@ -28,10 +29,10 @@ public class User {
         isActive = active;
     }
 
-    public User() {
+    public Users() {
     }
 
-    public User(Long id,String mail, String firstName, String middleName, String lastName) {
+    public Users(Long id, String mail, String firstName, String middleName, String lastName) {
         this.id = id;
         this.mail = mail;
         this.firstName = firstName;
@@ -39,7 +40,7 @@ public class User {
         this.lastName = lastName;
     }
 
-    public User(String mail, String firstName, String middleName, String lastName, Boolean isActive) {
+    public Users(String mail, String firstName, String middleName, String lastName, Boolean isActive) {
         this.mail = mail;
         this.firstName = firstName;
         this.middleName = middleName;
@@ -47,7 +48,7 @@ public class User {
         this.isActive = isActive;
     }
 
-    public User(Long id, String mail, String firstName, String middleName, String lastName,Boolean isActive) {
+    public Users(Long id, String mail, String firstName, String middleName, String lastName, Boolean isActive) {
         this.id = id;
         this.mail = mail;
         this.firstName = firstName;
@@ -87,8 +88,8 @@ public class User {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return Objects.equals(id, user.id) && Objects.equals(mail, user.mail) && Objects.equals(firstName, user.firstName) && Objects.equals(middleName, user.middleName) && Objects.equals(lastName, user.lastName) && Objects.equals(isActive, user.isActive);
+        Users users = (Users) o;
+        return Objects.equals(id, users.id) && Objects.equals(mail, users.mail) && Objects.equals(firstName, users.firstName) && Objects.equals(middleName, users.middleName) && Objects.equals(lastName, users.lastName) && Objects.equals(isActive, users.isActive);
     }
 
     @Override

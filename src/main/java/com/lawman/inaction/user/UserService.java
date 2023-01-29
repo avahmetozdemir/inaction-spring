@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -31,34 +30,34 @@ public class UserService {
     }
 
     public UserDto getUserById(Long id) {
-        User user = findUserById(id);
-        return userDtoConverter.convert(user);
+        Users users = findUserById(id);
+        return userDtoConverter.convert(users);
     }
 
     public UserDto createUser(CreateUserRequest userRequest) {
-        User user  = new User(userRequest.getMail(), userRequest.getFirstName(), userRequest.getMiddleName(), userRequest.getLastName(),false);
+        Users users = new Users(userRequest.getMail(), userRequest.getFirstName(), userRequest.getMiddleName(), userRequest.getLastName(),false);
 
-        return userDtoConverter.convert(userRepository.save(user));
+        return userDtoConverter.convert(userRepository.save(users));
 
     }
 
     public UserDto updateUser(String mail, UpdateUserRequest updateUserRequest) {
-        User user = findUserByMail(mail);
-        if(!user.getActive()) {
+        Users users = findUserByMail(mail);
+        if(!users.getActive()) {
             logger.warn(String.format("User is not active to update!, user mail: %s", mail));
             throw new UserIsNotActiveException("User is not active to update!");
         }
-        User updatedUser = new User( user.getId(),user.getMail(), updateUserRequest.getFirstName(),updateUserRequest.getMiddleName(),updateUserRequest.getLastName(),user.getActive());
+        Users updatedUsers = new Users( users.getId(), users.getMail(), updateUserRequest.getFirstName(),updateUserRequest.getMiddleName(),updateUserRequest.getLastName(), users.getActive());
 
-        return userDtoConverter.convert(userRepository.save(updatedUser));
+        return userDtoConverter.convert(userRepository.save(updatedUsers));
 
     }
 
-    private User findUserByMail(String mail) {
+    private Users findUserByMail(String mail) {
       return userRepository.findByMail(mail).orElseThrow(()->new UserNotFoundException("User couldn't be found by following mail: " + mail));
     }
 
-    private User findUserById(Long id) {
+    private Users findUserById(Long id) {
         return userRepository.findById(id).orElseThrow(()-> new UserNotFoundException(("User couldn't be found by following id: " + id)));
     }
 
@@ -78,17 +77,17 @@ public class UserService {
     }
 
     private void  changeActivationUser(Long id, Boolean isActive) {
-        User user  = findUserById(id);
+        Users users = findUserById(id);
 
-        User updatedUser = new User( user.getId(),user.getMail(), user.getFirstName(),user.getMiddleName(),user.getLastName(),isActive);
+        Users updatedUsers = new Users( users.getId(), users.getMail(), users.getFirstName(), users.getMiddleName(), users.getLastName(),isActive);
 
-        userRepository.save(updatedUser);
+        userRepository.save(updatedUsers);
     }
 
 
 
     public UserDto getUserByMail(String mail) {
-        User user = findUserByMail(mail);
-        return userDtoConverter.convert(user);
+        Users users = findUserByMail(mail);
+        return userDtoConverter.convert(users);
     }
 }

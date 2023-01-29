@@ -6,11 +6,8 @@ import com.lawman.inaction.user.dto.UserDto;
 import com.lawman.inaction.user.dto.UserDtoConverter;
 import com.lawman.inaction.user.exception.UserIsNotActiveException;
 import com.lawman.inaction.user.exception.UserNotFoundException;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-import org.mockito.Mockito;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,7 +15,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-public class UserServiceTest extends TestSupport {
+public class UsersServiceTest extends TestSupport {
     private UserDtoConverter converter;
     private UserRepository repository;
 
@@ -34,16 +31,16 @@ public class UserServiceTest extends TestSupport {
 
     @Test
     public void testGetAllUsers_itShouldReturnUserDto() {
-        List<User> userList = generateUsers();
-        List<UserDto> userDtoList = generateUserDtoList(userList);
-        when(repository.findAll()).thenReturn(userList);
-        when(converter.convert(userList)).thenReturn(userDtoList);
+        List<Users> usersList = generateUsers();
+        List<UserDto> userDtoList = generateUserDtoList(usersList);
+        when(repository.findAll()).thenReturn(usersList);
+        when(converter.convert(usersList)).thenReturn(userDtoList);
 
         List<UserDto> result = userService.getAllUsers();
 
         assertEquals(userDtoList, result);
         verify(repository).findAll();
-        verify(converter).convert(userList);
+        verify(converter).convert(usersList);
 
 
 
@@ -53,16 +50,16 @@ public class UserServiceTest extends TestSupport {
     public void testGetUserByMail_whenUserMailExist_itShouldReturnUserDto() {
         String mail= "mail@gmail.com";
 
-        User user = generateUser(mail);
+        Users users = generateUser(mail);
         UserDto userDto= generateUserDto(mail);
-        when(repository.findByMail(mail)).thenReturn(Optional.of(user));
-        when(converter.convert(user)).thenReturn(userDto);
+        when(repository.findByMail(mail)).thenReturn(Optional.of(users));
+        when(converter.convert(users)).thenReturn(userDto);
 
         UserDto result = userService.getUserByMail(mail);
 
         assertEquals(userDto, result);
         verify(repository).findByMail(mail);
-        verify(converter).convert(user);
+        verify(converter).convert(users);
 
 
 
@@ -89,12 +86,12 @@ public class UserServiceTest extends TestSupport {
     public void testCreateUser_itShouldReturnCreatedUserDto() {
         String mail= "mail@gmail.com";
         CreateUserRequest request = new CreateUserRequest(mail, "firstName", "middleName","lastName" );
-        User user =  new User(mail,"firstName", "middleName","lastName",false );
-        User savedUser = new User(1L, mail, "firstName", "middleName","lastName",false );
+        Users users =  new Users(mail,"firstName", "middleName","lastName",false );
+        Users savedUsers = new Users(1L, mail, "firstName", "middleName","lastName",false );
         UserDto userDto = new UserDto(mail, "firstName", "middleName","lastName");
 
-        when(repository.save(user)).thenReturn(savedUser);
-        when(converter.convert(savedUser)).thenReturn(userDto);
+        when(repository.save(users)).thenReturn(savedUsers);
+        when(converter.convert(savedUsers)).thenReturn(userDto);
 
         UserDto result = userService.createUser((request));
 
@@ -102,8 +99,8 @@ public class UserServiceTest extends TestSupport {
         assertEquals(userDto,result);
 
 
-        verify(repository).save(user);
-        verify(converter).convert(savedUser);
+        verify(repository).save(users);
+        verify(converter).convert(savedUsers);
 
 
     }
@@ -112,14 +109,14 @@ public class UserServiceTest extends TestSupport {
     public void testUpdateUser_whenUserMailExistAndUserIsActive_itShouldReturnUpdatedUserDto() {
         String mail= "mail@gmail.com";
         UpdateUserRequest request = new UpdateUserRequest( "firstName2", "middleName2","lastName2" );
-        User user =  new User(1L,mail,"firstName", "middleName","lastName",true );
-        User updatedUser = new User(1L, mail, "firstName2", "middleName2","lastName2",true );
-        User savedUser = new User(1L, mail, "firstName2", "middleName2","lastName2",true );
+        Users users =  new Users(1L,mail,"firstName", "middleName","lastName",true );
+        Users updatedUsers = new Users(1L, mail, "firstName2", "middleName2","lastName2",true );
+        Users savedUsers = new Users(1L, mail, "firstName2", "middleName2","lastName2",true );
         UserDto userDto = new UserDto(mail, "firstName2", "middleName2","lastName2");
 
-        when(repository.findByMail(mail)).thenReturn(Optional.of(user));
-        when(repository.save(updatedUser)).thenReturn(savedUser);
-        when(converter.convert(savedUser)).thenReturn(userDto);
+        when(repository.findByMail(mail)).thenReturn(Optional.of(users));
+        when(repository.save(updatedUsers)).thenReturn(savedUsers);
+        when(converter.convert(savedUsers)).thenReturn(userDto);
 
         UserDto result = userService.updateUser(mail, request);
 
@@ -127,8 +124,8 @@ public class UserServiceTest extends TestSupport {
         assertEquals(userDto,result);
 
         verify(repository).findByMail(mail);
-        verify(repository).save(updatedUser);
-        verify(converter).convert(savedUser);
+        verify(repository).save(updatedUsers);
+        verify(converter).convert(savedUsers);
 
 
     }
@@ -156,10 +153,10 @@ public class UserServiceTest extends TestSupport {
     public void testUpdateUser_whenUserMailExistButUserIsNotActive_itShouldThrowUserNotActiveException() {
         String mail= "mail@gmail.com";
         UpdateUserRequest request = new UpdateUserRequest( "firstName2", "middleName2","lastName2" );
-        User user =  new User(1L,mail,"firstName", "middleName","lastName",false );
+        Users users =  new Users(1L,mail,"firstName", "middleName","lastName",false );
 
 
-        when(repository.findByMail(mail)).thenReturn(Optional.of(user));
+        when(repository.findByMail(mail)).thenReturn(Optional.of(users));
 
         assertThrows(UserIsNotActiveException.class, () -> userService.updateUser(mail, request));
 
@@ -177,15 +174,15 @@ public class UserServiceTest extends TestSupport {
     public void testDeactivateUser_whenUserIdExist_itShouldUpdateUserByActiveTrue() {
         String mail= "mail@gmail.com";
 
-        User user =  new User(userId,mail,"firstName", "middleName","lastName",true );
-        User savedUser =  new User(userId,mail,"firstName", "middleName","lastName",false );
+        Users users =  new Users(userId,mail,"firstName", "middleName","lastName",true );
+        Users savedUsers =  new Users(userId,mail,"firstName", "middleName","lastName",false );
 
-        when(repository.findById(userId)).thenReturn(Optional.of(user));
+        when(repository.findById(userId)).thenReturn(Optional.of(users));
 
         userService.deactivateUser(userId);
 
         verify(repository).findById(userId);
-        verify(repository).save(savedUser);
+        verify(repository).save(savedUsers);
 
     }
 
@@ -205,15 +202,15 @@ public class UserServiceTest extends TestSupport {
     public void testActivateUser_whenUserIdExist_itShouldUpdateUserByActiveTrue() {
         String mail= "mail@gmail.com";
 
-        User user =  new User(userId,mail,"firstName", "middleName","lastName",false );
-        User savedUser =  new User(userId,mail,"firstName", "middleName","lastName",true );
+        Users users =  new Users(userId,mail,"firstName", "middleName","lastName",false );
+        Users savedUsers =  new Users(userId,mail,"firstName", "middleName","lastName",true );
 
-        when(repository.findById(userId)).thenReturn(Optional.of(user));
+        when(repository.findById(userId)).thenReturn(Optional.of(users));
 
         userService.activateUser(userId);
 
         verify(repository).findById(userId);
-        verify(repository).save(savedUser);
+        verify(repository).save(savedUsers);
 
     }
 
@@ -233,9 +230,9 @@ public class UserServiceTest extends TestSupport {
     public void testDeleteUser_whenUserIdExist_itShouldDeleteUser() {
         String mail= "mail@gmail.com";
 
-        User user =  new User(userId,mail,"firstName", "middleName","lastName",false );
+        Users users =  new Users(userId,mail,"firstName", "middleName","lastName",false );
 
-        when(repository.findById(userId)).thenReturn(Optional.of(user));
+        when(repository.findById(userId)).thenReturn(Optional.of(users));
 
         userService.deleteUser(userId);
 

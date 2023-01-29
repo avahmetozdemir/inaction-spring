@@ -9,18 +9,18 @@ import java.util.stream.IntStream;
 
 public class TestSupport {
     public static Long userId = 100L;
-    public static List<User> generateUsers() {
+    public static List<Users> generateUsers() {
       return  IntStream.range(0,5).mapToObj(i ->
-            new User((long) i, i+"@gmail.com" ,"firstName"+ i, "", "lastName" + i, new Random(2).nextBoolean())
+            new Users((long) i, i+"@gmail.com" ,"firstName"+ i, "", "lastName" + i, new Random(2).nextBoolean())
         ).collect(Collectors.toList());
     }
 
-    public static List<UserDto> generateUserDtoList(List<User> userList) {
-        return  userList.stream().map(x ->  new UserDto(x.getMail(),x.getFirstName(), x.getMiddleName(),x.getLastName())).collect(Collectors.toList());
+    public static List<UserDto> generateUserDtoList(List<Users> usersList) {
+        return  usersList.stream().map(x ->  new UserDto(x.getMail(),x.getFirstName(), x.getMiddleName(),x.getLastName())).collect(Collectors.toList());
     }
 
-    public static User generateUser(String mail){
-        return new User((long) userId, userId+"@gmail.com" ,"firstName"+ userId, "", "lastName" + userId, true);
+    public static Users generateUser(String mail){
+        return new Users((long) userId, userId+"@gmail.com" ,"firstName"+ userId, "", "lastName" + userId, true);
     }
 
     public static UserDto generateUserDto(String mail){
