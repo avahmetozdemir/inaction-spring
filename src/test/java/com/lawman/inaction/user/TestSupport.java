@@ -2,6 +2,7 @@ package com.lawman.inaction.user;
 
 import com.lawman.inaction.user.dto.UserDto;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -16,7 +17,7 @@ public class TestSupport {
     }
 
     public static List<UserDto> generateUserDtoList(List<Users> usersList) {
-        return  usersList.stream().map(x ->  new UserDto(x.getMail(),x.getFirstName(), x.getMiddleName(),x.getLastName())).collect(Collectors.toList());
+        return  usersList.stream().map(x ->  new UserDto(x.getMail(),x.getFirstName(), x.getMiddleName(),x.getLastName(),new ArrayList<>())).collect(Collectors.toList());
     }
 
     public static Users generateUser(String mail){
@@ -25,7 +26,7 @@ public class TestSupport {
 
     public static UserDto generateUserDto(String mail){
 
-        return new UserDto(mail,"firstName"+ userId, "", "lastName" );
+        return new UserDto(mail,"firstName"+ userId, "", "lastName" ,new ArrayList<>());
 
     }
 }

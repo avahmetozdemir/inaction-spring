@@ -1,6 +1,7 @@
 package com.lawman.inaction.user;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -19,7 +20,7 @@ public class Users {
     private Boolean isActive;
 
     @OneToMany(mappedBy = "users", fetch = FetchType.LAZY, cascade =CascadeType.ALL )
-    private Set<UserDetails> userDetailsSet;
+    private Set<UserDetails> userDetailsSet= new HashSet<>();
 
     public Boolean getActive() {
         return isActive;
@@ -92,6 +93,10 @@ public class Users {
 
     public String getLastName() {
         return lastName;
+    }
+
+    public Set<UserDetails> getUserDetailsSet() {
+        return userDetailsSet;
     }
 
     @Override

@@ -9,6 +9,7 @@ import com.lawman.inaction.user.exception.UserNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -88,7 +89,7 @@ public class UsersServiceTest extends TestSupport {
         CreateUserRequest request = new CreateUserRequest(mail, "firstName", "middleName","lastName" );
         Users users =  new Users(mail,"firstName", "middleName","lastName",false );
         Users savedUsers = new Users(1L, mail, "firstName", "middleName","lastName",false );
-        UserDto userDto = new UserDto(mail, "firstName", "middleName","lastName");
+        UserDto userDto = new UserDto(mail, "firstName", "middleName","lastName", new ArrayList<>());
 
         when(repository.save(users)).thenReturn(savedUsers);
         when(converter.convert(savedUsers)).thenReturn(userDto);
@@ -112,7 +113,7 @@ public class UsersServiceTest extends TestSupport {
         Users users =  new Users(1L,mail,"firstName", "middleName","lastName",true );
         Users updatedUsers = new Users(1L, mail, "firstName2", "middleName2","lastName2",true );
         Users savedUsers = new Users(1L, mail, "firstName2", "middleName2","lastName2",true );
-        UserDto userDto = new UserDto(mail, "firstName2", "middleName2","lastName2");
+        UserDto userDto = new UserDto(mail, "firstName2", "middleName2","lastName2",new ArrayList<>());
 
         when(repository.findByMail(mail)).thenReturn(Optional.of(users));
         when(repository.save(updatedUsers)).thenReturn(savedUsers);

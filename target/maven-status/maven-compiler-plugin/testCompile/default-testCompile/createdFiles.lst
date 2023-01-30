@@ -1,3 +1,3 @@
 com/lawman/inaction/InactionApplicationTests.class
 com/lawman/inaction/user/TestSupport.class
-com/lawman/inaction/user/UserServiceTest.class
+com/lawman/inaction/user/UsersServiceTest.class
