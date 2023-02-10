@@ -8,6 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface AdvertisementElasticSearchRepository  extends ElasticsearchRepository<Advertisement,String> {
 
-    @Query("{\"bool\": {\"must\": [{\"match\": {\"advertisement.name\": \"?0\"}}]}}")
-    Page<Advertisement> findByName(String name, Pageable pageable);
+    @Query("{\"match\": {\"message\": \"?0\"}}")
+    Page<Advertisement> findByTitle(String title, Pageable pageable);
 }
